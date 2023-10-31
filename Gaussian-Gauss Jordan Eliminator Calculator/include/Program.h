@@ -1,13 +1,20 @@
 #pragma once
-#include "Gaussian.h"
 
-#include <iostream>
+#include <fstream>
+#include "Gaussian.h"
 
 class Program
 {
 public:
-	Program();
-	~Program();
+    Program();
+    ~Program();
 
-	void run();
+    void run();
+
+private:
+    Gaussian Matrix;
+
+    void loadAugmentedMatrix(const std::string& Filename);
+    void displayAugmentedMatrix() const;
+    void performOperations();
 };
