@@ -22,7 +22,7 @@ Calculations::~Calculations() = default;
 
 void Calculations::resize(const double Rows, const double Cols)
 {
-    AugmentedMatrix.resize(Rows, std::vector<double>(Cols));
+    AugmentedMatrix.resize(static_cast<_int64>(Rows), std::vector<double>(static_cast<_int64>(Cols)));
 }
 
 std::vector<std::vector<double>>& Calculations::getMatrix()
