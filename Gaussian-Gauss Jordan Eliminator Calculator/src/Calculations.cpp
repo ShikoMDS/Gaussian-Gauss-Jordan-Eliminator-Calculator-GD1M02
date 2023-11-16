@@ -20,7 +20,7 @@ Calculations::Calculations() = default;
 
 Calculations::~Calculations() = default;
 
-void Calculations::resize(const double Rows, const double Cols)
+void Calculations::resize(const size_t Rows, const size_t Cols)
 {
     AugmentedMatrix.resize(Rows, std::vector<double>(Cols));
 }

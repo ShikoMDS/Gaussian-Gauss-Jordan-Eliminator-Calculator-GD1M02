@@ -20,7 +20,7 @@ public:
     Calculations();
     ~Calculations();
 
-    void resize(double Rows, double Cols);
+    void resize(const size_t Rows, const size_t Cols);
 	std::vector<std::vector<double>>& getMatrix();
     void displayMatrix() const;
 
