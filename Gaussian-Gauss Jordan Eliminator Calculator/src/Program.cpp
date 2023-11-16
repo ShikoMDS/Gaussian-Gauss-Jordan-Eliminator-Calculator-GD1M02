@@ -13,6 +13,8 @@ void Program::run()
     std::cout << "Initial Augmented Matrix:" << std::endl;
     displayAugmentedMatrix();
 
+    autoStoreMatrix();
+    RowEchelonMatrix.displayMatrix();
     performOperations();
 }
 
@@ -60,9 +62,13 @@ void Program::performOperations()
         std::cout << "\nChoose an operation:\n";
         std::cout << "1. Swap Rows\n";
         std::cout << "2. Multiply Row by a Scalar\n";
-        std::cout << "3. Add a Multiple of Row to Another Row\n";
-        std::cout << "4. Convert to Row Echelon Form\n";
-        std::cout << "5. Convert to Reduced Row Echelon Form\n";
+        std::cout << "3. Divide Row by a Scalar\n";
+        std::cout << "4. Add a Multiple of Row to Another Row\n";
+        std::cout << "5. Subtract a Multiple of Row to Another Row\n";
+        std::cout << "6. Add a Division of Row to Another Row\n";
+        std::cout << "7. Subtract a Division of Row to Another Row\n";
+        std::cout << "8. Convert to Row Echelon Form\n";
+        std::cout << "9. Convert to Reduced Row Echelon Form\n";
         std::cout << "0. Exit\n";
         std::cout << "Enter your choice: ";
         std::cin >> Choice;
@@ -76,34 +82,79 @@ void Program::performOperations()
             Matrix.swapRows(Row1, Row2);
             std::cout << "\nRows swapped:\n";
             Matrix.displayMatrix();
+            detectResult(Matrix);
             break;
         case 2:
-            int Row;
-            double Factor;
+            int RowMult;
+            double FactorMult;
             std::cout << "Enter the row and scalar factor (space-separated): ";
-            std::cin >> Row >> Factor;
-            Matrix.multiplyRow(Row, Factor);
+            std::cin >> RowMult >> FactorMult;
+            Matrix.multiplyRow(RowMult, FactorMult);
             std::cout << "\nRow multiplied by scalar:\n";
             Matrix.displayMatrix();
+            detectResult(Matrix);
             break;
         case 3:
-            int TargetRow, SourceRow;
-            double AddFactor;
-            std::cout << "Enter the target row, source row, and factor (space-separated): ";
-            std::cin >> TargetRow >> SourceRow >> AddFactor;
-            Matrix.addRows(TargetRow, SourceRow, AddFactor);
-            std::cout << "\nMultiple of source row added to target row:\n";
+            int RowDiv;
+            double FactorDiv;
+            std::cout << "Enter the row and scalar factor (space-separated): ";
+            std::cin >> RowDiv >> FactorDiv;
+            Matrix.divideRow(RowDiv, FactorDiv);
+            std::cout << "\nRow divided by scalar:\n";
             Matrix.displayMatrix();
+            detectResult(Matrix);
             break;
         case 4:
+            int TargetRowAddMult, SourceRowAddMult;
+            double AddFactorMult;
+            std::cout << "Enter the target row, source row, and factor (space-separated): ";
+            std::cin >> TargetRowAddMult >> SourceRowAddMult >> AddFactorMult;
+            Matrix.addRowsMult(TargetRowAddMult, SourceRowAddMult, AddFactorMult);
+            std::cout << "\nMultiple of source row added to target row:\n";
+            Matrix.displayMatrix();
+            detectResult(Matrix);
+            break;
+        case 5:
+            int TargetRowSubMult, SourceRowSubMult;
+            double SubFactorMult;
+            std::cout << "Enter the target row, source row, and factor (space-separated): ";
+            std::cin >> TargetRowSubMult >> SourceRowSubMult >> SubFactorMult;
+            Matrix.subtractRowsMult(TargetRowSubMult, SourceRowSubMult, SubFactorMult);
+            std::cout << "\nMultiple of source row subtracted to target row:\n";
+            Matrix.displayMatrix();
+            detectResult(Matrix);
+            break;
+        case 6:
+            int TargetRowAddDiv, SourceRowAddDiv;
+            double AddFactorDiv;
+            std::cout << "Enter the target row, source row, and factor (space-separated): ";
+            std::cin >> TargetRowAddDiv >> SourceRowAddDiv >> AddFactorDiv;
+            Matrix.addRowsDiv(TargetRowAddDiv, SourceRowAddDiv, AddFactorDiv);
+            std::cout << "\nDivision of source row added to target row:\n";
+            Matrix.displayMatrix();
+            detectResult(Matrix);
+            break;
+        case 7:
+            int TargetRowSubDiv, SourceRowSubDiv;
+            double SubFactorDiv;
+            std::cout << "Enter the target row, source row, and factor (space-separated): ";
+            std::cin >> TargetRowSubDiv >> SourceRowSubDiv >> SubFactorDiv;
+            Matrix.subtractRowsDiv(TargetRowSubDiv, SourceRowSubDiv, SubFactorDiv);
+            std::cout << "\nDivision of source row subtracted to target row:\n";
+            Matrix.displayMatrix();
+            detectResult(Matrix);
+            break;
+        case 8:
             Matrix.convertToRowEchelonForm();
             std::cout << "\nMatrix converted to Row Echelon Form:\n";
             Matrix.displayMatrix();
+            detectResult(Matrix);
             break;
-        case 5:
+        case 9:
             Matrix.convertToReducedRowEchelonForm();
             std::cout << "\nMatrix converted to Reduced Row Echelon Form:\n";
             Matrix.displayMatrix();
+            detectResult(Matrix);
             break;
         case 0:
             std::cout << "Exiting...\n";
@@ -114,3 +165,25 @@ void Program::performOperations()
         }
     } while (Choice != 0);
 }
+
+void Program::autoStoreMatrix()
+{
+    RowEchelonMatrix = Matrix;
+    ReducedMatrix = Matrix;
+
+    RowEchelonMatrix.convertToRowEchelonForm();
+    ReducedMatrix.convertToReducedRowEchelonForm();
+}
+
+void Program::detectResult(const Gaussian& ResultMatrix) const
+{
+    if (ResultMatrix == RowEchelonMatrix)
+    {
+        std::cout << "\nMatrix is in Row Echelon form!\n";
+    }
+    if (ResultMatrix == ReducedMatrix)
+    {
+        std::cout << "\nMatrix is in Reduced Row Echelon form!\n";
+    }
+}
+

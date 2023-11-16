@@ -58,30 +58,53 @@ void Gaussian::performRowOperation(const int Row1, const int Row2, const double 
 
 void Gaussian::convertToRowEchelonForm()
 {
-	const size_t NumRows = AugmentedMatrix.size();
-	const size_t NumCols = AugmentedMatrix[0].size();
+    const size_t NumRows = AugmentedMatrix.size();
+    if (NumRows == 0) return; // Handle empty matrix
+
+    const size_t NumCols = AugmentedMatrix[0].size();
+    for (size_t I = 0; I < NumRows; ++I)
+    {
+        if (AugmentedMatrix[I].size() != NumCols) return; // Handle non-rectangular matrix
+    }
 
     for (size_t PivotRow = 0; PivotRow < NumRows; ++PivotRow)
     {
-        // Find the pivot element in the current row
-        const double PivotElement = AugmentedMatrix[PivotRow][PivotRow];
+        // Implementing partial pivoting
+        size_t MaxRow = PivotRow;
+        double MaxElem = fabs(AugmentedMatrix[PivotRow][PivotRow]);
+        for (size_t K = PivotRow + 1; K < NumRows; ++K)
+        {
+	        const double AbsVal = fabs(AugmentedMatrix[K][PivotRow]);
+            if (AbsVal > MaxElem)
+            {
+                MaxElem = AbsVal;
+                MaxRow = K;
+            }
+        }
+
+        // Swap the rows if necessary
+        if (MaxRow != PivotRow)
+        {
+            std::swap(AugmentedMatrix[MaxRow], AugmentedMatrix[PivotRow]);
+        }
+
+        // Check for zero pivot element
+        if (AugmentedMatrix[PivotRow][PivotRow] == 0) continue;
 
         // Make the pivot element 1
+        const double PivotElement = AugmentedMatrix[PivotRow][PivotRow];
         for (size_t J = PivotRow; J < NumCols; ++J)
         {
             AugmentedMatrix[PivotRow][J] /= PivotElement;
         }
 
         // Eliminate other entries in the pivot column
-        for (size_t I = 0; I < NumRows; ++I)
+        for (size_t I = PivotRow + 1; I < NumRows; ++I)
         {
-            if (I != PivotRow)
+            const double Factor = AugmentedMatrix[I][PivotRow];
+            for (size_t J = PivotRow; J < NumCols; ++J)
             {
-	            const double Factor = AugmentedMatrix[I][PivotRow];
-                for (size_t j = PivotRow; j < NumCols; ++j)
-                {
-                    AugmentedMatrix[I][j] -= Factor * AugmentedMatrix[PivotRow][j];
-                }
+                AugmentedMatrix[I][J] -= Factor * AugmentedMatrix[PivotRow][J];
             }
         }
     }
@@ -147,6 +170,27 @@ void Gaussian::convertToReducedRowEchelonForm()
     }
 }
 
+bool Gaussian::operator==(const Gaussian& Other) const
+{
+    if (this->AugmentedMatrix.size() != Other.AugmentedMatrix.size()) {
+        return false;
+    }
+
+    for (size_t I = 0; I < this->AugmentedMatrix.size(); ++I) {
+        if (this->AugmentedMatrix[I].size() != Other.AugmentedMatrix[I].size()) {
+            return false;
+        }
+
+        for (size_t J = 0; J < this->AugmentedMatrix[I].size(); ++J) {
+            if (std::abs(this->AugmentedMatrix[I][J] - Other.AugmentedMatrix[I][J]) > 1e-6) { // 1e-6 is the allowed margin of error
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 bool Gaussian::isZeroRow(const int Row) const
 {
     // Check if a row is a zero row
@@ -182,11 +226,47 @@ void Gaussian::multiplyRow(const int Row, const double Factor)
     }
 }
 
-void Gaussian::addRows(const int Row1, const int Row2, const double Factor)
+void Gaussian::divideRow(const int Row, const double Factor)
+{
+    // Multiply a row by a scalar factor
+    for (double& Value : AugmentedMatrix[Row])
+    {
+        Value /= Factor;
+    }
+}
+
+void Gaussian::addRowsMult(const int Row1, const int Row2, const double Factor)
 {
     // Add a multiple of Row2 to Row1
     for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
     {
         AugmentedMatrix[Row1][Col] += Factor * AugmentedMatrix[Row2][Col];
+    }
+}
+
+void Gaussian::subtractRowsMult(const int Row1, const int Row2, const double Factor)
+{
+    // Add a multiple of Row2 to Row1
+    for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
+    {
+        AugmentedMatrix[Row1][Col] -= Factor * AugmentedMatrix[Row2][Col];
+    }
+}
+
+void Gaussian::addRowsDiv(const int Row1, const int Row2, const double Factor)
+{
+    // Add a multiple of Row2 to Row1
+    for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
+    {
+        AugmentedMatrix[Row1][Col] += AugmentedMatrix[Row2][Col] / Factor;
+    }
+}
+
+void Gaussian::subtractRowsDiv(const int Row1, const int Row2, const double Factor)
+{
+    // Add a multiple of Row2 to Row1
+    for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
+    {
+        AugmentedMatrix[Row1][Col] -= AugmentedMatrix[Row2][Col] / Factor;
     }
 }

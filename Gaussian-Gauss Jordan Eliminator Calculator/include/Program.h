@@ -13,8 +13,14 @@ public:
 
 private:
     Gaussian Matrix;
+    Gaussian RowEchelonMatrix;
+    Gaussian ReducedMatrix;
 
     void loadAugmentedMatrix(const std::string& Filename);
     void displayAugmentedMatrix() const;
     void performOperations();
+
+    void autoStoreMatrix();
+
+    void detectResult(const Gaussian& ResultMatrix) const;
 };
