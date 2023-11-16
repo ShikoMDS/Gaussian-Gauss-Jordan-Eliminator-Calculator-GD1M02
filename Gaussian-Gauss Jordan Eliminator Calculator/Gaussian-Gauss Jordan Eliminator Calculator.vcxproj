@@ -141,7 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Gaussian.cpp" />
+    <ClCompile Include="src\Calculations.cpp" />
     <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -149,7 +149,7 @@
     <Text Include="Gaussian.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Gaussian.h" />
+    <ClInclude Include="include\Calculations.h" />
     <ClInclude Include="include\Program.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

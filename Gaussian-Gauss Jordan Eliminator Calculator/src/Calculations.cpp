@@ -1,24 +1,36 @@
-#include "Gaussian.h"
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) [Year] Media Design School
+File Name : Calculations.cpp
+Description : Matrix calculation implementations for Gaussian/Gauss Jordan eliminator calculator program
+Author : Chris, Shikomisen (Ayoub)
+Mail : christopher.houdt@mds.ac.nz, ayoub.ahmad@mds.ac.nz
+**************************************************************************/
+
+#include "Calculations.h"
 
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
 
-Gaussian::Gaussian() = default;
+Calculations::Calculations() = default;
 
-Gaussian::~Gaussian() = default;
+Calculations::~Calculations() = default;
 
-void Gaussian::resize(const double Rows, const double Cols)
+void Calculations::resize(const double Rows, const double Cols)
 {
     AugmentedMatrix.resize(Rows, std::vector<double>(Cols));
 }
 
-std::vector<std::vector<double>>& Gaussian::getMatrix()
+std::vector<std::vector<double>>& Calculations::getMatrix()
 {
     return AugmentedMatrix;
 }
 
-void Gaussian::displayMatrix() const
+void Calculations::displayMatrix() const
 {
 	for (size_t I = 0; I < AugmentedMatrix.size(); ++I)
     {
@@ -34,7 +46,7 @@ void Gaussian::displayMatrix() const
     }
 }
 
-void Gaussian::performRowOperation(const int Row1, const int Row2, const double Factor)
+void Calculations::performRowOperation(const int Row1, const int Row2, const double Factor)
 {
     // Check if the rows are within valid range
     if (Row1 < 0 || Row1 >= AugmentedMatrix.size() || Row2 < 0 || Row2 >= AugmentedMatrix.size())
@@ -56,7 +68,7 @@ void Gaussian::performRowOperation(const int Row1, const int Row2, const double 
     }
 }
 
-void Gaussian::convertToRowEchelonForm()
+void Calculations::convertToRowEchelonForm()
 {
     const size_t NumRows = AugmentedMatrix.size();
     if (NumRows == 0) return; // Handle empty matrix
@@ -110,7 +122,7 @@ void Gaussian::convertToRowEchelonForm()
     }
 }
 
-void Gaussian::convertToReducedRowEchelonForm()
+void Calculations::convertToReducedRowEchelonForm()
 {
 	const size_t NumRows = AugmentedMatrix.size();
 	const size_t NumCols = AugmentedMatrix[0].size();
@@ -124,7 +136,7 @@ void Gaussian::convertToReducedRowEchelonForm()
             ++PivotCol;
         }
 
-        // If pivotCol is still less than numCols, there is a non-zero entry in the pivot column
+        // If pivotCol is still less than NumCols, there is a non-zero entry in the pivot column
         if (PivotCol < NumCols)
         {
             // Make the pivot element in the current row equal to 1
@@ -170,7 +182,8 @@ void Gaussian::convertToReducedRowEchelonForm()
     }
 }
 
-bool Gaussian::operator==(const Gaussian& Other) const
+// Overload operator for "==" to explicitly compare 2 matrices
+bool Calculations::operator==(const Calculations& Other) const
 {
     if (this->AugmentedMatrix.size() != Other.AugmentedMatrix.size()) {
         return false;
@@ -191,13 +204,13 @@ bool Gaussian::operator==(const Gaussian& Other) const
     return true;
 }
 
-bool Gaussian::isZeroRow(const int Row) const
+bool Calculations::isZeroRow(const int Row) const
 {
     // Check if a row is a zero row
     return std::ranges::all_of(AugmentedMatrix[Row], [](const double Value) { return Value == 0; });
 }
 
-void Gaussian::swapRows(const int Row1, const int Row2)
+void Calculations::swapRows(const int Row1, const int Row2)
 {
     // Swap two rows in the matrix
     std::cout << "Before Swap:\n";
@@ -217,7 +230,7 @@ void Gaussian::swapRows(const int Row1, const int Row2)
     displayMatrix(); // Add this line to display matrix after swap
 }
 
-void Gaussian::multiplyRow(const int Row, const double Factor)
+void Calculations::multiplyRow(const int Row, const double Factor)
 {
     // Multiply a row by a scalar factor
     for (double& Value : AugmentedMatrix[Row])
@@ -226,16 +239,16 @@ void Gaussian::multiplyRow(const int Row, const double Factor)
     }
 }
 
-void Gaussian::divideRow(const int Row, const double Factor)
+void Calculations::divideRow(const int Row, const double Factor)
 {
-    // Multiply a row by a scalar factor
+    // Divide a row by a scalar factor
     for (double& Value : AugmentedMatrix[Row])
     {
         Value /= Factor;
     }
 }
 
-void Gaussian::addRowsMult(const int Row1, const int Row2, const double Factor)
+void Calculations::addRowsMult(const int Row1, const int Row2, const double Factor)
 {
     // Add a multiple of Row2 to Row1
     for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
@@ -244,7 +257,7 @@ void Gaussian::addRowsMult(const int Row1, const int Row2, const double Factor)
     }
 }
 
-void Gaussian::subtractRowsMult(const int Row1, const int Row2, const double Factor)
+void Calculations::subtractRowsMult(const int Row1, const int Row2, const double Factor)
 {
     // Add a multiple of Row2 to Row1
     for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
@@ -253,18 +266,18 @@ void Gaussian::subtractRowsMult(const int Row1, const int Row2, const double Fac
     }
 }
 
-void Gaussian::addRowsDiv(const int Row1, const int Row2, const double Factor)
+void Calculations::addRowsDiv(const int Row1, const int Row2, const double Factor)
 {
-    // Add a multiple of Row2 to Row1
+    // Add a division of Row2 to Row1
     for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
     {
         AugmentedMatrix[Row1][Col] += AugmentedMatrix[Row2][Col] / Factor;
     }
 }
 
-void Gaussian::subtractRowsDiv(const int Row1, const int Row2, const double Factor)
+void Calculations::subtractRowsDiv(const int Row1, const int Row2, const double Factor)
 {
-    // Add a multiple of Row2 to Row1
+    // Add a division of Row2 to Row1
     for (size_t Col = 0; Col < AugmentedMatrix[0].size(); ++Col)
     {
         AugmentedMatrix[Row1][Col] -= AugmentedMatrix[Row2][Col] / Factor;

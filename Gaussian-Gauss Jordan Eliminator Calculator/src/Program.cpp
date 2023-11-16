@@ -1,4 +1,17 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) [Year] Media Design School
+File Name : Program.cpp
+Description : Main UI IO implementations for Gaussian/Gauss Jordan eliminator calculator program
+Author : Chris, Shikomisen (Ayoub)
+Mail : christopher.houdt@mds.ac.nz, ayoub.ahmad@mds.ac.nz
+**************************************************************************/
+
 #include "Program.h"
+
 #include <iostream>
 
 Program::Program() = default;
@@ -14,7 +27,7 @@ void Program::run()
     displayAugmentedMatrix();
 
     autoStoreMatrix();
-    RowEchelonMatrix.displayMatrix();
+
     performOperations();
 }
 
@@ -175,7 +188,7 @@ void Program::autoStoreMatrix()
     ReducedMatrix.convertToReducedRowEchelonForm();
 }
 
-void Program::detectResult(const Gaussian& ResultMatrix) const
+void Program::detectResult(const Calculations& ResultMatrix) const
 {
     if (ResultMatrix == RowEchelonMatrix)
     {

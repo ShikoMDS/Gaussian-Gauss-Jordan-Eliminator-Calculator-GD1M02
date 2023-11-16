@@ -5,7 +5,7 @@ Auckland
 New Zealand
 (c) [Year] Media Design School
 File Name : main.cpp
-Description : Entry point for Gaussian/Gauss Jordan eliminator calculator program
+Description : Entry point for Calculations/Gauss Jordan eliminator calculator program
 Author : Chris, Shikomisen (Ayoub)
 Mail : christopher.houdt@mds.ac.nz, ayoub.ahmad@mds.ac.nz
 **************************************************************************/
